@@ -1,0 +1,362 @@
+{
+  "name": "automation_agent",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "e31efaa2-2311-4cc1-bf99-25156bdd771d",
+        "options": {
+          "binaryPropertyName": "file"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -500,
+        -180
+      ],
+      "id": "ed6e2cc6-a3c7-4baa-8f6a-02f17ee3bff9",
+      "name": "Webhook",
+      "webhookId": "e31efaa2-2311-4cc1-bf99-25156bdd771d"
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "file0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -240
+      ],
+      "id": "bbb75222-e9a9-4d06-b07f-dac3078854ac",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "783d228c-b640-43ab-8396-eb58e0fca945",
+              "name": "target_plqy",
+              "value": "={{ $json['﻿plqy'] }}",
+              "type": "string"
+            },
+            {
+              "id": "3c4ac86f-aa30-46a7-8ecb-d2c16a899e28",
+              "name": "target_lambda",
+              "value": "={{ $json['emission '] }}",
+              "type": "string"
+            },
+            {
+              "id": "6ac758da-7e68-42f8-9116-5757995321b2",
+              "name": "target_fwhm",
+              "value": "={{$json.fwhm}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        20,
+        -60
+      ],
+      "id": "ccc8341d-d301-4c85-a77e-4dbf94fbf5a5",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://926e-121-6-203-193.ngrok-free.app/reset",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "target_plqy",
+              "value": "={{ $json.target_plqy }}"
+            },
+            {
+              "name": "target_lambda",
+              "value": "={{ $json.target_lambda }}"
+            },
+            {
+              "name": "target_fwhm",
+              "value": "={{ $json.target_fwhm }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        320,
+        -180
+      ],
+      "id": "c0276118-948b-4f4d-a6b6-4f83d0ef6a3d",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9b9598b6-5dc7-44de-ad54-6042794ce2e9",
+              "name": "plqy",
+              "value": "={{ $json.observation[4] }}",
+              "type": "string"
+            },
+            {
+              "id": "4b5ecc4c-be4d-4e37-8987-aef15e127ed9",
+              "name": "emission",
+              "value": "={{ $json.observation[5] }}",
+              "type": "string"
+            },
+            {
+              "id": "22639989-72c0-45ff-b687-fe4c53fb7c6d",
+              "name": "fwhm",
+              "value": "={{ $json.observation[6] }}",
+              "type": "string"
+            },
+            {
+              "id": "5303db2a-a0c4-4173-83bf-f8a49356e365",
+              "name": "temperature ",
+              "value": "={{ $json.observation[3] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        -180
+      ],
+      "id": "1c5501c0-b5e9-40ac-8cce-f707e7b29b57",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -180
+      ],
+      "id": "bc8cb9cf-2ff0-49d6-857d-a7bc51386493",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": " https://926e-121-6-203-193.ngrok-free.app/step",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json ",
+        "body": "={   \"plqy\": {{$json.plqy}},   \"emission\": {{$json.emission}},   \"fwhm\": {{$json.fwhm}},   \"temperature\": {{ $json[\"temperature \"] }}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1020,
+        -180
+      ],
+      "id": "a6a234e9-d593-4e37-96ae-07c85e20f2a2",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7549d3c6-53ee-4dde-b6eb-07c39794cb47",
+              "name": "csbr_flow",
+              "value": "={{ $json.action.csbr }}",
+              "type": "string"
+            },
+            {
+              "id": "fa5949eb-3250-431d-a90d-92123f5dea66",
+              "name": "pbbr2_flow",
+              "value": "={{ $json.action.pbbr2 }}",
+              "type": "string"
+            },
+            {
+              "id": "5d294cac-4187-4231-be21-ceb81afe18ec",
+              "name": "temperature ",
+              "value": "={{ $json.action.temperature }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1240,
+        -180
+      ],
+      "id": "cc0b7897-279f-4960-9ed4-ada673b396da",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Here is the new action from the RL controller:\n\n• CsBr flow  : {{ $json.csbr_flow }} mL/min  \n• PbBr₂ flow : {{ $json.pbbr2_flow }} mL/min  \n• Temp set-point: {{ $json[\"temperature \"] }} °C  \n\n\nWrite a short (≤ 4 sentences) explanation, for a lab tech, of what this means and whether another optimisation step is expected.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        1460,
+        -180
+      ],
+      "id": "1738c76f-33c0-49cf-94c6-3b19b431e044",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1500,
+        40
+      ],
+      "id": "9af3d37a-3846-48c5-8b53-31c87b7cad79",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "ETaeWH41V8oufy3x",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "002fcc98-8789-494e-a8ea-2ecd48a85cd2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "79d86bfb642a942c4a10ca5fe840df6c3c8d254794a8ae7c1b468dd9854bf270"
+  },
+  "id": "Z0EmyjOUnWg0Koac",
+  "tags": []
+}
